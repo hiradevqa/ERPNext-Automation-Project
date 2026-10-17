@@ -5,12 +5,18 @@ import{Item} from '../pages/items'
 import {Page} from '@playwright/test';
 export{expect} from '@playwright/test';
 import{Stock} from '../pages/stock';
+import{Sales} from '../pages/sales';
+import{DeliveryNote} from '../pages/deliverynote';
+import { SalesInvoice } from '../pages/salesInvoice';
 
 type MyFixtures={
     loginPage:Login;
     customerPage:Customer;
     itemPage:Item;
     stockPage:Stock;
+    salesPage:Sales;
+    deliveryNotePage: DeliveryNote;
+    salesInvoicePage:SalesInvoice;
 };
 export const test = base.extend<MyFixtures>({
     loginPage:async({page},use)=>{
@@ -28,6 +34,18 @@ itemPage:async({page},use)=>{
 stockPage:async({page},use)=>{
         const stockPage=new Stock(page);
         await use(stockPage);
+    },
+salesPage:async({page},use)=>{
+        const salesPage=new Sales(page);
+        await use(salesPage);   
+    },
+deliveryNotePage:async({page},use)=>{
+        const deliveryNotePage=new DeliveryNote(page);
+        await use(deliveryNotePage);   
+    },
+salesInvoicePage:async({page},use)=>{
+        const salesInvoicePage=new SalesInvoice(page);
+        await use(salesInvoicePage);   
     }
 
 });

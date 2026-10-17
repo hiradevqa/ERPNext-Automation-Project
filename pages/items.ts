@@ -11,9 +11,7 @@ itemCode:Locator;
 itemName:Locator;
 itemGroup:Locator;
 //productOption:Locator;
-errorModalContainer:Locator;
-errorMsg:Locator;
-errorFields:Locator;
+
 filter:Locator;
 searchField:Locator;
 salesAndOrderContainer:Locator;
@@ -34,9 +32,8 @@ this.itemCode = page.locator('input[data-fieldname="item_code"]');
 this.itemName= page.locator('input[data-fieldname="item_name"]');
 this.itemGroup=page.locator('[data-fieldname="item_group"]');
 //this.productOption=page.getByRole('option').filter({ hasText: 'Products' });
-this.errorModalContainer=page.locator('.modal-content');
-this.errorMsg= this.errorModalContainer.getByText('Missing Values Required');
-this.errorFields=this.errorModalContainer.locator('.msgprint');
+
+
 this.filter=page.locator('.standard-filter-section.flex');
 this.searchField=this.filter.locator('input[data-fieldname="item_name"]');
 this.salesAndOrderText=page.getByText('Sales Order', { exact: true });

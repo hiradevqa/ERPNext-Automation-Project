@@ -10,7 +10,7 @@ await loginPage.login(
   await page.waitForURL('/desk');
 });
 
-/*test('Create a customer',async({page,customerPage})=>{
+test('Create a customer',async({page,customerPage})=>{
 await customerPage.clickSellingButton();
 await expect(customerPage.sidebar).toBeVisible();
 await customerPage.clickCustomerOption();
@@ -51,7 +51,7 @@ const a = customerPage.findName(customerName);
 await expect(a).toContainText(customerName);
 });
 
-test('Search newly created customer',async({page,customerPage})=>{
+test('1Se11arch newly created customer1',async({page,customerPage})=>{
 await customerPage.clickSellingButton();
 await expect(customerPage.sidebar).toBeVisible();
 await customerPage.clickCustomerOption();
@@ -67,7 +67,7 @@ await customerPage.clickName(customerName);
 const a = customerPage.findName(customerName);
 await expect(customerPage.customerNameField).toHaveValue(customerName);
 
-});*/
+});
 
 test('Update existing customer',async({page,customerPage})=>{
 await customerPage.clickSellingButton();

@@ -15,7 +15,7 @@ await loginPage.login(
   //await itemPage.clickItemOption();
 });
 
-/*test('Create stock item',async({page,itemPage})=>{
+test('Create stock item',async({page,itemPage})=>{
 await itemPage.clickaddItem();
 const itemCode=`QA-MOUSE-${Date.now()}`;
 const itemName=`QA Wireless Mouse-${Date.now()}`
@@ -110,7 +110,7 @@ const a = itemPage.getItemFields();
 await expect(a.itemNameField).toHaveValue(updatedItemName);
 await expect(a.itemGroupField).toHaveValue('Consumable');
 
-});*/
+});
 
 test('Make sure Item is being shown in sales',async({itemPage})=>{
 await itemPage.clickSales();

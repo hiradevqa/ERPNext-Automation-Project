@@ -4,6 +4,8 @@ import{user} from '../data/users';
 test.beforeEach(async({page})=>{
 await page.goto('/');
 });
+
+
 test('Login with valid credentials',async({page,loginPage})=>{
 await loginPage.login(
     user.validUser.email,
