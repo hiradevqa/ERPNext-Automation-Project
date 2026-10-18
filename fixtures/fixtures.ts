@@ -8,6 +8,7 @@ import{Stock} from '../pages/stock';
 import{Sales} from '../pages/sales';
 import{DeliveryNote} from '../pages/deliverynote';
 import { SalesInvoice } from '../pages/salesInvoice';
+import{Payment} from '../pages/payment.ts';
 
 type MyFixtures={
     loginPage:Login;
@@ -17,6 +18,7 @@ type MyFixtures={
     salesPage:Sales;
     deliveryNotePage: DeliveryNote;
     salesInvoicePage:SalesInvoice;
+    paymentPage:Payment;
 };
 export const test = base.extend<MyFixtures>({
     loginPage:async({page},use)=>{
@@ -46,6 +48,10 @@ deliveryNotePage:async({page},use)=>{
 salesInvoicePage:async({page},use)=>{
         const salesInvoicePage=new SalesInvoice(page);
         await use(salesInvoicePage);   
+    },
+paymentPage:async({page},use)=>{
+        const paymentPage=new Payment(page);
+        await use(paymentPage);   
     }
 
 });

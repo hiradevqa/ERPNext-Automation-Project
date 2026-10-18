@@ -85,7 +85,7 @@ async clickName(name:string){
 }
 
 async clickSaveCustomerUpdate(){
-await this.saveCustomerUpdate.click();
+    await this.saveCustomerUpdate.click();
 }
  
 }

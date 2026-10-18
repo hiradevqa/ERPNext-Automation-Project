@@ -35,7 +35,7 @@ await deliveryNotePage.clickButton('Submit');
 await deliveryNotePage.clickButton('Yes');
 });
 
-/*test('Generate Sales Invoice from transaction',async({page,salesInvoicePage})=>{
+test('Generate Sales Invoice from transaction',async({page,salesInvoicePage})=>{
 await page.pause();
 await salesInvoicePage.clickButton('Create');
 await expect(salesInvoicePage.dropdownContainer).toBeVisible();
@@ -46,7 +46,7 @@ await expect(salesInvoicePage.itemCode).toContainText('QA-MOUSE-001');
 await expect(salesInvoicePage.itemQty).toContainText('2');
 await expect(salesInvoicePage.itemRate).toContainText('20');
 
-});*/
+});
 
 test('Verify Customer and Item on invoice',async({page,salesInvoicePage})=>{
 await page.pause();

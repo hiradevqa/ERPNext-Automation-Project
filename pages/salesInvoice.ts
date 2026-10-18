@@ -13,6 +13,8 @@ itemCode:Locator;
 itemQty:Locator;
 itemRate:Locator;
 status:Locator;
+id:Locator;
+idContainer:Locator;
 
 
 constructor(page:Page){
@@ -27,12 +29,20 @@ this.itemRate=this.grid.getItemRate(this.salesInvoicePageContainer);
 this.customerField=this.grid.getCustomer(this.salesInvoicePageContainer);
 this.amount=this.grid.getAmount(this.salesInvoicePageContainer);
 this.status=page.locator('.indicator-pill.no-indicator-dot.whitespace-nowrap');
+//used in sales also
+this.idContainer=this.salesInvoicePageContainer.locator('.form-name-container.mt-1.flex.justify-between.form-name-copy');
+this.id= this.idContainer.locator('span.ellipsis.mr-3');
 }
 
-//repeated in deliveryNote
+//repeated in deliveryNote & Payment & sales Invoice
 async clickDropsownOption(name:string){
     const c = this.dropdownContainer.filter({has:this.page.getByText(name, { exact: true })});
     c.getByText(name, { exact: true }).click();
+}
+//used in sales also
+async Fid (){
+const  firstId = await this.id.textContent();
+return firstId;
 }
 
 }
