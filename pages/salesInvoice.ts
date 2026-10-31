@@ -28,6 +28,7 @@ this.itemQty=this.grid.getItemQty(this.salesInvoicePageContainer);
 this.itemRate=this.grid.getItemRate(this.salesInvoicePageContainer);
 this.customerField=this.grid.getCustomer(this.salesInvoicePageContainer);
 this.amount=this.grid.getAmount(this.salesInvoicePageContainer);
+//used in stocks also
 this.status=page.locator('.indicator-pill.no-indicator-dot.whitespace-nowrap');
 //used in sales also
 this.idContainer=this.salesInvoicePageContainer.locator('.form-name-container.mt-1.flex.justify-between.form-name-copy');

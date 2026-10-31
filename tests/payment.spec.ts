@@ -58,4 +58,5 @@ await paymentPage.clickButton('Yes');
 await paymentPage.clickButton('Payments');
 await expect(paymentPage.dropdownContainer).toBeVisible();
 await paymentPage.clickDropsownOption('Desktop');
+
 });

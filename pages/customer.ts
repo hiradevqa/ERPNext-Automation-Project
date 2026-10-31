@@ -1,4 +1,4 @@
-import{Page,Locator} from '@playwright/test';
+/*import{Page,Locator} from '@playwright/test';
 
 export class Customer {
   page: Page;
@@ -88,4 +88,149 @@ async clickSaveCustomerUpdate(){
     await this.saveCustomerUpdate.click();
 }
  
+}
+
+
+
+import { Page, Locator } from '@playwright/test';
+import { BasePage } from './base';
+
+export class Customer extends BasePage {
+
+  // Page
+  customerListContainer: Locator;
+
+  // Fields
+  customerName: Locator;
+
+  // Modal
+  modalTitle: Locator;
+  modalHeader: Locator;
+
+  // Search
+  nameSearchFieldContainer: Locator;
+  nameSearchField: Locator;
+
+  constructor(page: Page) {
+    super(page);
+
+    this.customerListContainer =page.locator('[id="page-List/Customer/List"]');
+
+    this.customerName =page.getByText('Customer Name');
+
+    this.modalTitle =this.modalContainer.getByText('New Customer');
+
+    this.modalHeader =page.getByText('Missing Values Required');
+
+    this.nameSearchFieldContainer =this.customerListContainer.locator('.standard-filter-section.flex');
+
+    this.nameSearchField =this.nameSearchFieldContainer.locator('input[data-fieldname="customer_name"]');
+  }
+
+  async fillmodal(name: string) {
+    const a = this.container.filter({
+      has: this.customerName
+    });
+
+    await a.locator(this.inputField).fill(name);
+  }
+
+  async fillSearchField(name: string) {
+    await this.nameSearchField.fill(name);
+  }
+
+  async clearSearchField() {
+    await this.nameSearchField.clear();
+  }
+
+  async clickName(name: string) {
+    await this.findName(name).click();
+  }
+
+  getCustomerNameField() {
+  const a = this.container.filter({has: this.customerName});
+  return a.locator(this.inputField);
+}
+
+}*/
+
+import { Page, Locator } from '@playwright/test';
+import { BasePage } from './base';
+
+export class Customer extends BasePage {
+
+  // Page
+  customerListContainer: Locator;
+  customerFormContainer: Locator;
+
+  // Fields
+  customerNameField: Locator;
+
+  // Modal
+  modalTitle: Locator;
+  modalHeader: Locator;
+  modalCustomerNameField: Locator;
+
+  // Search
+  nameSearchFieldContainer: Locator;
+  nameSearchField: Locator;
+
+  constructor(page: Page) {
+    super(page);
+
+    this.customerListContainer =page.locator('[id="page-List/Customer/List"]');
+
+    this.customerFormContainer =
+      page.locator('#page-Customer');
+
+    this.customerNameField =
+      this.customerFormContainer.locator(
+        'input[data-fieldname="customer_name"]'
+      );
+
+    this.modalTitle =
+      this.modalContainer.getByText('New Customer');
+
+    this.modalHeader =
+      page.getByText('Missing Values Required');
+
+    this.modalCustomerNameField =
+      this.modalContainer.locator(
+        'input[data-fieldname="customer_name"]'
+      );
+
+    this.nameSearchFieldContainer =
+      this.customerListContainer.locator(
+        '.standard-filter-section.flex'
+      );
+
+    this.nameSearchField =
+      this.nameSearchFieldContainer.locator(
+        'input[data-fieldname="customer_name"]'
+      );
+  }
+
+  async fillModal(name: string) {
+    await this.modalCustomerNameField.fill(name);
+  }
+
+  async fillCustomerName(name: string) {
+    await this.customerNameField.fill(name);
+  }
+
+  async fillSearchField(name: string) {
+    await this.nameSearchField.fill(name);
+  }
+
+  async clearSearchField() {
+    await this.nameSearchField.clear();
+  }
+
+  async clickName(name: string) {
+    await this.findName(name).click();
+  }
+
+  getCustomerNameField() {
+    return this.customerNameField;
+  }
 }

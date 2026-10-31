@@ -92,6 +92,12 @@ const  firstId = await this.id.textContent();
 return firstId;
 }
 
+getItemCodeCell() {
+  const itemRow = this.row.nth(1);
 
+  return itemRow.locator(
+  'div.grid-static-col[data-fieldname="item_code"]'
+  );
+}
 
 }

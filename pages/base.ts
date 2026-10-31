@@ -23,6 +23,7 @@ export class BasePage {
    container:Locator;
    inputField: Locator;
    errorFields:Locator;
+   status:Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -48,6 +49,8 @@ export class BasePage {
     this.dropdownInputFill=this.dropdownInputContainer.locator('input.form-control.input-xs');
     this.errorModalContainer=page.locator('.modal-content');
     this.errorFields=this.errorModalContainer.locator('.msgprint');
+    //used in stocks,salesInvoice,deliveryNote,sales
+    this.status=page.locator('.indicator-pill.no-indicator-dot.whitespace-nowrap');
   }
 
 async clickAddButton(name: string) {
@@ -91,10 +94,22 @@ async clickButton(name:string){
   await this.page.getByRole('button',{ name }).click();
 }
 
-async clickDesktopOption(name:string){
+//delete 
+/*async clickDesktopOption(name:string){
 const desktopOption = this.desktopOptionContainer.filter({has:this.page.getByText(name)});
 await desktopOption.click();
+}*/
+
+async clickDesktopOption(name: string) {
+  const desktopOption = this.desktopOptionContainer.filter({
+    has: this.page.getByText(name, { exact: true })
+  });
+
+  await desktopOption.waitFor({ state: 'visible' });
+
+  await desktopOption.click();
 }
+
 
 async clicksidebarOption(name:string){
   const sidebarOption= this.sidebarContainer.filter({has:this.page.getByText(name, {exact:true})});

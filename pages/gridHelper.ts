@@ -35,5 +35,6 @@ return container.locator('.grid-body .grid-row').locator('div.grid-static-col[da
 getCustomer(container: Locator){
 return container.locator('input[data-fieldname="customer"]');
 }
+
 }
 
