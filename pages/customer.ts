@@ -183,31 +183,19 @@ export class Customer extends BasePage {
     this.customerFormContainer =
       page.locator('#page-Customer');
 
-    this.customerNameField =
-      this.customerFormContainer.locator(
-        'input[data-fieldname="customer_name"]'
-      );
+    this.customerNameField =this.customerFormContainer.locator('input[data-fieldname="customer_name"]');
 
-    this.modalTitle =
-      this.modalContainer.getByText('New Customer');
+    this.modalTitle =this.modalContainer.getByText('New Customer');
 
-    this.modalHeader =
-      page.getByText('Missing Values Required');
+    this.modalHeader =page.getByText('Missing Values Required');
 
-    this.modalCustomerNameField =
-      this.modalContainer.locator(
-        'input[data-fieldname="customer_name"]'
-      );
+    this.modalCustomerNameField =this.modalContainer.locator('input[data-fieldname="customer_name"]');
 
     this.nameSearchFieldContainer =
-      this.customerListContainer.locator(
-        '.standard-filter-section.flex'
-      );
+      this.customerListContainer.locator('.standard-filter-section.flex');
 
     this.nameSearchField =
-      this.nameSearchFieldContainer.locator(
-        'input[data-fieldname="customer_name"]'
-      );
+      this.nameSearchFieldContainer.locator('input[data-fieldname="customer_name"]');
   }
 
   async fillModal(name: string) {

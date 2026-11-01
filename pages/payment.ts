@@ -7,7 +7,8 @@ grid: GridHelper;
 dropdownContainer:Locator;
 paymentPageContainer:Locator;
 newPaymentEntryTitle: Locator;
-
+customerField: Locator;
+invoiceReference: Locator;
 /*itemCode:Locator;
 itemQty:Locator;
 itemRate:Locator;
@@ -19,7 +20,8 @@ status:Locator;*/
     this.dropdownContainer=page.locator('.dropdown-menu.show');
     this.paymentPageContainer = page.locator('#page-Payment\\ Entry');
     this.newPaymentEntryTitle= this.grid.getTitle(this.paymentPageContainer);
-    
+    this.customerField = this.paymentPageContainer.locator('input[data-fieldname="party"]');
+    this.invoiceReference = this.paymentPageContainer.locator('.grid-body .grid-row [data-fieldname="reference_name"]');
   }
 
 async clickDropsownOption(name:string){

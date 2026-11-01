@@ -130,70 +130,48 @@ export class Item extends BasePage {
   constructor(page: Page) {
     super(page);
 
-    this.itemListContainer =
-      page.locator('[id="page-List/Item/List"]');
+    this.itemListContainer = page.locator('[id="page-List/Item/List"]');
 
-    this.itemAndPricingContainer =
-      page.locator('.item-anchor');
+    this.itemAndPricingContainer = page.locator('.item-anchor');
 
-    this.label =
-      page.getByText('Items & Pricing');
+    this.label = page.getByText('Items & Pricing');
 
-    this.item =
-      page.getByText('Item', { exact: true });
+    this.item = page.getByText('Item', { exact: true });
 
-    this.itemCodeClass =
-      page.locator('.control-input');
+    this.itemCodeClass = page.locator('.control-input');
 
-    this.itemCode =
-      page.locator('input[data-fieldname="item_code"]');
+    this.itemCode = page.locator('input[data-fieldname="item_code"]');
 
-    this.itemName =
-      page.locator('input[data-fieldname="item_name"]');
+    this.itemName = page.locator('input[data-fieldname="item_name"]');
 
-    this.itemGroup =
-      page.locator('[data-fieldname="item_group"]');
+    this.itemGroup = page.locator('[data-fieldname="item_group"]');
 
-    this.filter =
-      this.itemListContainer.locator('.standard-filter-section.flex');
+    this.filter = this.itemListContainer.locator('.standard-filter-section.flex');
 
-    this.searchField =
-      this.filter.locator('input[data-fieldname="item_name"]');
+    this.searchField = this.filter.locator('input[data-fieldname="item_name"]');
    
   }
 
   async clickItemAndPricing() {
-    await this.itemAndPricingContainer
-      .filter({ has: this.label })
-      .click();
+    await this.itemAndPricingContainer.filter({ has: this.label }).click();
   }
 
   async clickItemOption() {
-    await this.itemAndPricingContainer
-      .filter({ has: this.item })
-      .click();
+    await this.itemAndPricingContainer.filter({ has: this.item }).click();
   }
 
   async fillItemCode(code: string) {
-    const a = this.itemCodeClass.filter({
-      has: this.itemCode
-    });
-
+    const a = this.itemCodeClass.filter({has: this.itemCode});
     await a.locator(this.itemCode).fill(code);
   }
 
   async fillItemName(name: string) {
-    const a = this.itemCodeClass.filter({
-      has: this.itemName
-    });
-
+    const a = this.itemCodeClass.filter({has: this.itemName});
     await a.locator(this.itemName).fill(name);
   }
 
 async selectItemGroup(groupName: string) {
-  const a = this.itemCodeClass.filter({
-    has: this.itemGroup
-  });
+  const a = this.itemCodeClass.filter({has: this.itemGroup});
 
   const field = a.locator(this.itemGroup);
 
@@ -201,8 +179,7 @@ async selectItemGroup(groupName: string) {
   await field.fill(groupName);
 
   const option = this.page
-    .locator('div[role="option"]:visible')
-    .filter({ hasText: groupName });
+    .locator('div[role="option"]:visible').filter({ hasText: groupName });
 
   await option.click();
 }
@@ -220,15 +197,8 @@ async selectItemGroup(groupName: string) {
   }
 
   getItemFields() {
-    const itemNameContainer =
-      this.itemCodeClass.filter({
-        has: this.itemName
-      });
-
-    const itemGroupContainer =
-      this.itemCodeClass.filter({
-        has: this.itemGroup
-      });
+    const itemNameContainer =this.itemCodeClass.filter({has: this.itemName});
+    const itemGroupContainer = this.itemCodeClass.filter({has: this.itemGroup});
 
     return {
       itemNameField: itemNameContainer.locator(this.itemName),
@@ -238,9 +208,6 @@ async selectItemGroup(groupName: string) {
 
   findItem(name: string) {
   return this.itemListContainer
-    .locator('.list-row-container')
-    .filter({
-      has: this.page.getByText(name, { exact: true })
-    });
+   .locator('.list-row-container').filter({ has: this.page.getByText(name, { exact: true })});
 }
 }

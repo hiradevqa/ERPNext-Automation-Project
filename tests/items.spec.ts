@@ -359,14 +359,7 @@ test('Update item info', async ({ page, itemPage }) => {
     .toHaveValue('Consumable');
 });
 
-/*test('Make sure Item is being shown in sales', async ({ itemPage }) => {
 
-  await itemPage.clicksidebarOption('Sales Order');
-
-  await itemPage.clickAddButton('Add Sales Order');
-
-  await itemPage.clickField('Customer');
-});*/
 
 test('Make sure Item is being shown in sales', async ({ page, itemPage, salesPage }) => {
 
@@ -389,10 +382,10 @@ test('Make sure Item is being shown in sales', async ({ page, itemPage, salesPag
   await itemPage.clicksidebarOption('Sales Order');
   await itemPage.clickAddButton('Add Sales Order');
 
-  await salesPage.clickField('customer');
+  await salesPage.clickCustomerField();
   await salesPage.selectoption('Ahmed Traders');
-
-  await salesPage.selectItemCode1(itemCode);
+  await page.waitForTimeout(1000);
+  await salesPage.selectItemCode(itemCode);
 
   const itemCodeCell = salesPage.getItemCodeCell();
 

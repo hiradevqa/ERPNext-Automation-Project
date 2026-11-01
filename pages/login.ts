@@ -50,18 +50,12 @@ export class Login {
   }
 
   emailErrorMessage() {
-    const emailFieldError = this.inputGroup.filter({
-      has: this.emailField,
-    });
-
+    const emailFieldError = this.inputGroup.filter({has: this.emailField, });
     return emailFieldError.locator(this.validationMessage);
   }
 
   passwordErrorMessage() {
-    const passwordFieldError = this.inputGroup.filter({
-      has: this.passwordField,
-    });
-
+    const passwordFieldError = this.inputGroup.filter({has: this.passwordField,});
     return passwordFieldError.locator(this.validationMessage);
   }
 

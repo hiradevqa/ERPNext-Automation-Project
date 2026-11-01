@@ -280,7 +280,7 @@ await stockPage.clickButton('Yes');
 await expect(stockPage.status).toHaveText('Submitted');
 });
 
-
+//Final
 /*test('Verify source warehouse quantity decreases after transfer',async({page,stockPage})=>{ //this Test is not according to requirements- needs updation also
 await stockPage.clickDesktopOption('Stock');
 await stockPage.clickSidebarInsideOption('Reports', 'Stock Balance');
@@ -412,7 +412,7 @@ await page.pause();
 });
 
 
-
+//Yet to see
 test('Attempt stock transaction without required Field',async({page,stockPage})=>{
 await stockPage.clickDesktopOption('Stock');
 await stockPage.clicksidebarOption('Stock Entry');

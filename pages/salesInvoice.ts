@@ -13,8 +13,8 @@ itemCode:Locator;
 itemQty:Locator;
 itemRate:Locator;
 status:Locator;
-id:Locator;
-idContainer:Locator;
+invoiceId:Locator;
+invoiceIdContainer:Locator;
 
 
 constructor(page:Page){
@@ -29,21 +29,20 @@ this.itemRate=this.grid.getItemRate(this.salesInvoicePageContainer);
 this.customerField=this.grid.getCustomer(this.salesInvoicePageContainer);
 this.amount=this.grid.getAmount(this.salesInvoicePageContainer);
 //used in stocks also
-this.status=page.locator('.indicator-pill.no-indicator-dot.whitespace-nowrap');
+this.status=this.salesInvoicePageContainer.locator('.indicator-pill.no-indicator-dot.whitespace-nowrap');
 //used in sales also
-this.idContainer=this.salesInvoicePageContainer.locator('.form-name-container.mt-1.flex.justify-between.form-name-copy');
-this.id= this.idContainer.locator('span.ellipsis.mr-3');
+this.invoiceIdContainer=this.salesInvoicePageContainer.locator('.form-name-container.mt-1.flex.justify-between.form-name-copy');
+this.invoiceId= this.invoiceIdContainer.locator('span.ellipsis.mr-3');
 }
 
 //repeated in deliveryNote & Payment & sales Invoice
-async clickDropsownOption(name:string){
-    const c = this.dropdownContainer.filter({has:this.page.getByText(name, { exact: true })});
-    c.getByText(name, { exact: true }).click();
+async clickDropdownOption(name:string){
+    const dropdownOption = this.dropdownContainer.filter({has:this.page.getByText(name, { exact: true })});
+    await dropdownOption.getByText(name, { exact: true }).click();
 }
-//used in sales also
-async Fid (){
-const  firstId = await this.id.textContent();
-return firstId;
+//used in payemt
+async getSalesInvoiceId(): Promise<string> {
+  await expect(this.invoiceId).toHaveText(/^ACC-SINV-\d{4}-\d+$/);
+  return await this.invoiceId.innerText();
 }
-
 }

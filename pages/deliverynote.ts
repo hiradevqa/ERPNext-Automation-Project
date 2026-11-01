@@ -17,21 +17,21 @@ status:Locator;
 constructor(page:Page){
 super(page);
 this.grid = new GridHelper(page);
-this.dropdownContainer=page.locator('.dropdown-menu.show');
 this.deliveryNotePageContainer = page.locator('#page-Delivery\\ Note');
+this.dropdownContainer=page.locator('.dropdown-menu.show');
 this.deliveryNoteTitle = this.deliveryNotePageContainer.locator('.title-area');
 this.customerField = this.deliveryNotePageContainer.locator('input[data-fieldname="customer"]');
 this.sourceWarehouseField=this.deliveryNotePageContainer.locator('input[data-fieldname="set_warehouse"]');
 this.itemCode =this.deliveryNotePageContainer.locator('.grid-body .grid-row').locator('div.grid-static-col[data-fieldname="item_code"]');
 this.itemQty =this.deliveryNotePageContainer.locator('.grid-body .grid-row').locator('div.grid-static-col[data-fieldname="qty"]');
 this.itemRate =this.deliveryNotePageContainer.locator('.grid-body .grid-row').locator('[data-fieldname="rate"]');
-this.status=page.locator('.indicator-pill.no-indicator-dot.whitespace-nowrap');
+this.status= this.deliveryNotePageContainer.locator('.indicator-pill.no-indicator-dot.whitespace-nowrap');
 
 }
 
 async clickDropsownOption(name:string){
-    const c = this.dropdownContainer.filter({has:this.page.getByText(name, { exact: true })});
-    c.getByText(name, { exact: true }).click();
+    const dropdownOption = this.dropdownContainer.filter({has:this.page.getByText(name, { exact: true })});
+    dropdownOption.getByText(name, { exact: true }).click();
 }
 
 getCustomerField(){

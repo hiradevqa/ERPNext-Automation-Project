@@ -1,4 +1,4 @@
-import { BasePage } from './base';
+/*import { BasePage } from './base';
 import{Page,Locator,expect} from '@playwright/test';
 import { GridHelper } from './gridHelper';
 
@@ -100,4 +100,148 @@ getItemCodeCell() {
   );
 }
 
+}*/
+
+
+
+
+import { Page, Locator, expect } from '@playwright/test';
+import { BasePage } from './base';
+import { GridHelper } from './gridHelper';
+
+export class Sales extends BasePage {
+  grid: GridHelper;
+
+  salesOrderContainer: Locator;
+  salesOrderRow: Locator;
+  customerField: Locator;
+
+  warehouseInput:Locator;
+  warehouseContainer:Locator;
+
+  amount: Locator;
+  orderId: Locator;
+  
+
+  constructor(page: Page) {
+    super(page);
+
+    this.grid = new GridHelper(page);
+
+    this.salesOrderContainer = page.locator('#page-Sales\\ Order');
+
+    this.row = this.salesOrderContainer.locator('.grid-row');
+    this.salesOrderRow = this.row.nth(1);
+
+    this.customerField = this.grid.getCustomer(this.salesOrderContainer);
+
+    this.warehouseContainer = this.salesOrderContainer.locator('.frappe-control.input-max-width');
+    this.warehouseInput = page.locator('.input-with-feedback.form-control');
+
+    this.amount = this.salesOrderRow.locator(
+      'input[data-fieldname="amount"]'
+    );
+
+    const orderIdContainer = this.salesOrderContainer.locator(
+      '.form-name-container.mt-1.flex.justify-between.form-name-copy'
+    );
+
+    this.orderId = orderIdContainer.locator('span.ellipsis.mr-3');
+  }
+
+
+  async clickCustomerField() {
+  await this.customerField.click();
+  }
+
+  async selectDeliveryDate(deliveryDate: string) {
+    const dateCell = this.salesOrderRow.locator(
+      'div.grid-static-col[data-fieldname="delivery_date"]'
+    );
+
+    const dateInput = this.salesOrderRow.locator(
+      'input[data-fieldname="delivery_date"]'
+    );
+
+    await dateCell.click();
+    await dateInput.fill(deliveryDate);
+    await expect(dateInput).toHaveValue(deliveryDate);
+    await dateInput.press('Enter');
+  }
+
+ async selectSourceWarehouse(fieldName: string) {
+  const warehouseField = this.warehouseContainer.filter({
+    has: this.page.getByText(fieldName)
+  });
+
+  const warehouseInput = warehouseField.locator(this.warehouseInput);
+  await warehouseInput.fill('Finished');
+}
+
+  async selectItemCode(itemCode: string) {
+    const itemCell = this.salesOrderRow.locator(
+      'div.grid-static-col[data-fieldname="item_code"]'
+    );
+
+    await itemCell.click();
+
+    const itemInput = this.salesOrderRow.locator(
+      'input[data-fieldname="item_code"]'
+    );
+
+    await itemInput.fill(itemCode);
+
+    const option = this.page
+      .locator('div[role="option"]:visible')
+      .getByText(itemCode, { exact: true });
+
+    await option.click();
+  }
+
+  async fillQuantity(quantity: string) {
+    const qtyCell = this.salesOrderRow.locator(
+      'div.grid-static-col[data-fieldname="qty"]'
+    );
+
+    const quantityInput = this.salesOrderRow.locator(
+      'input[data-fieldname="qty"]'
+    );
+
+    await qtyCell.click();
+    await quantityInput.fill(quantity);
+    await expect(quantityInput).toHaveValue(quantity);
+    await quantityInput.blur();
+  }
+
+  async fillItemRate(rate: string) {
+    const rateCell = this.salesOrderRow.locator(
+      'div.grid-static-col[data-fieldname="rate"]'
+    );
+
+    const rateInput = this.salesOrderRow.locator(
+      'input[data-fieldname="rate"]'
+    );
+
+    await rateCell.click();
+    await rateInput.fill(rate);
+    
+    await rateInput.blur();
+
+    await expect(rateInput).toHaveValue(
+      Number(rate).toLocaleString('en-US', {
+        minimumFractionDigits: 2
+      })
+    );
+  }
+
+  async getSalesOrderId() {
+    await expect(this.orderId).toHaveText(/^SAL-ORD-\d{4}-\d+$/);
+    return await this.orderId.textContent();
+  }
+
+  getItemCodeCell() {
+    return this.salesOrderRow.locator(
+      'div.grid-static-col[data-fieldname="item_code"]'
+    );
+  }
 }
