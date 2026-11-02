@@ -1,6 +1,11 @@
 import { test,expect } from '../fixtures/fixtures';
 import { user } from '../data/users';
+
+
+
 let invoice_id:string;
+let outstandingAmount: number;
+
 test.beforeEach(async({page,loginPage,customerPage,itemPage,salesPage,deliveryNotePage,salesInvoicePage})=>{
 await page.goto('/');
 await loginPage.login(
@@ -9,12 +14,12 @@ await loginPage.login(
   );
 await page.waitForURL('/desk');
 await salesPage.clickDesktopOption('Selling');
-await salesPage.clicksidebarOption('Sales Order');
-await salesPage.clickAddButton('Add Sales Order');
-await salesPage.clickField('Customer');
-await salesPage.selectoption('Ahmed Traders');
+await salesPage.clickSidebarOption('Sales Order');
+await salesPage.clickButton('Add Sales Order');
+await salesPage.clickCustomerField();
+await salesPage.selectOption('Ahmed Traders');
 await salesPage.selectSourceWarehouse('Set Source Warehouse');
-await salesPage.selectoption('Finished Goods - TxlD');
+await salesPage.selectOption('Finished Goods - TxlD');
 await salesPage.selectItemCode('QA-MOUSE-001');
 await page.waitForTimeout(1000);
 await salesPage.selectDeliveryDate('30-10-2027');
@@ -26,7 +31,7 @@ await salesPage.clickButton('Submit');
 await salesPage.clickButton('Yes');
 await deliveryNotePage.clickButton('Create');
 await expect(deliveryNotePage.dropdownContainer).toBeVisible();
-await deliveryNotePage.clickDropsownOption('Delivery Note');
+await deliveryNotePage.clickDropdownOption('Delivery Note');
 await expect(deliveryNotePage.deliveryNoteTitle).toContainText('New Delivery Note');
 await deliveryNotePage.clickButton('Save');
 await deliveryNotePage.clickButton('Submit');
@@ -40,6 +45,8 @@ invoice_id = await salesInvoicePage.getSalesInvoiceId();
 console.log(invoice_id);
 await salesInvoicePage.clickButton('Submit');
 await salesInvoicePage.clickButton('Yes');
+await expect(salesInvoicePage.status).toHaveText('Unpaid');
+outstandingAmount = await salesInvoicePage.getOutstandingAmount();
 
 });
 
@@ -50,34 +57,52 @@ test('Create Payment Entry from Sales Invoice', async ({ page, paymentPage }) =>
 
   await expect(paymentPage.dropdownContainer).toBeVisible();
 
-  await paymentPage.clickDropsownOption('Payment');
+  await paymentPage.clickDropdownOption('Payment');
 
-  await expect(paymentPage.newPaymentEntryTitle)
-    .toContainText('New Payment Entry');
+  await expect(paymentPage.newPaymentEntryTitle).toContainText('New Payment Entry');
 
-  // Verify customer
   await expect(paymentPage.customerField).toHaveValue('Ahmed Traders');
 
-  // Verify invoice reference
   await expect(paymentPage.invoiceReference).toContainText(invoice_id);
 
 });
 
-test('Submit full payment',async({page,paymentPage})=>{
-await paymentPage.clickButton('Create');
-await expect(paymentPage.dropdownContainer).toBeVisible();
-await paymentPage.clickDropsownOption('Payment');
-await expect(paymentPage.newPaymentEntryTitle).toContainText('New Payment Entry');
-await paymentPage.fillChecqueNo('212123131322213');
-await paymentPage.clickButton('Save');
-await expect(
-  page.getByRole('button', { name: 'Submit', exact: true })
-).toBeVisible();
-await paymentPage.clickButton('Submit');
-await paymentPage.clickButton('Yes');
-await expect(
-  paymentPage.status
-).toHaveText('Submitted');
 
+test('Submit full payment', async ({ page, paymentPage }) => {
+
+  await paymentPage.clickButton('Create');
+  await expect(paymentPage.dropdownContainer).toBeVisible();
+  await paymentPage.clickDropdownOption('Payment');
+
+  await expect(paymentPage.newPaymentEntryTitle).toContainText('New Payment Entry');
+
+  // Verify invoice reference
+  await expect(paymentPage.invoiceReference).toContainText(invoice_id);
+
+  // Verify full payment amount
+  await expect(paymentPage.paidAmount).toHaveValue(outstandingAmount.toFixed(2));
+
+  await expect(paymentPage.totalAllocatedAmount).toContainText(
+       outstandingAmount.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }));
+
+  // Verify payment accounts
+  await expect(paymentPage.paidFromAccount).not.toHaveValue('');
+
+  await expect(paymentPage.paidToAccount).not.toHaveValue('');
+
+  await paymentPage.fillChequeNumber('212123131322213');
+
+  await paymentPage.clickButton('Save');
+  await expect(paymentPage.status).toHaveText('Draft');
+
+  await expect(page.getByRole('button', { name: 'Submit', exact: true })).toBeVisible();
+
+  await paymentPage.clickButton('Submit');
+  await paymentPage.clickButton('Yes');
+
+  await expect(paymentPage.status).toHaveText('Submitted');
 
 });

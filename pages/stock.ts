@@ -127,6 +127,8 @@ export class Stock extends BasePage {
   grid: GridHelper;
   stockEntryRow: Locator;
 
+  status:Locator;
+
   constructor(page: Page) {
     super(page);
 
@@ -137,6 +139,8 @@ export class Stock extends BasePage {
     this.stockEntryRow = this.stockEntryContainer.locator('.grid-row').nth(1);
 
     this.stockBalanceRow = page.locator('.dt-row.dt-row-0.vrow');
+
+    this.status = this.stockEntryContainer.locator('.indicator-pill.no-indicator-dot.whitespace-nowrap');
   }
 
   async selectItem(itemCode: string) {
@@ -172,7 +176,7 @@ export class Stock extends BasePage {
 
 
 
-async selectStockBalanceWarehouses(sourceWarehouse: string, targetWarehouse: string) {
+  async selectStockBalanceWarehouses(sourceWarehouse: string, targetWarehouse: string) {
   const warehouseFilter = this.filterSection.locator('[data-fieldname="warehouse"]');
 
   const selectedValue = warehouseFilter.locator('div.status-text.ellipsis');
@@ -202,27 +206,58 @@ async selectStockBalanceWarehouses(sourceWarehouse: string, targetWarehouse: str
   await searchInput.fill('');
   await searchInput.fill(targetWarehouse);
   await targetOption.click();
-}
+ }
 
 
 
 
-  async selectSourceWarehouse(sourceWarehouseName: string) {
+  /*async selectSourceWarehouse(sourceWarehouseName: string) {
   const sourceWarehouseCell = this.stockEntryRow.locator('div.grid-static-col[data-fieldname="s_warehouse"]' );
-  const sourceWarehouseInput = this.stockEntryRow.locator( 'input[data-fieldname="s_warehouse"]');
+  const sourceWarehouseInput = this.stockEntryRow.locator( 'input[data-fieldname="s_warehouse"]:visible');
 
-  await sourceWarehouseCell.click();
+  await sourceWarehouseCell.dblclick();
+  await expect(sourceWarehouseInput).toBeVisible({ timeout: 10000 });
+  await sourceWarehouseInput.fill(sourceWarehouseName);
+
+  const warehouseOption = this.page.locator('div[role="option"]:visible').filter({ hasText: sourceWarehouseName });
+  await warehouseOption.click();
+ }*/
+
+
+
+async selectSourceWarehouse(sourceWarehouseName: string) {
+  const stockRow = this.stockEntryContainer.locator('.grid-row[data-idx="1"]');
+  const editRowButton = stockRow.locator('.btn-open-row');
+
+  // Open the item row
+  await editRowButton.click();
+
+  const sourceWarehouseInput = this.stockEntryContainer.locator('input[data-fieldname="s_warehouse"]:visible');
+
+  await expect(sourceWarehouseInput).toBeVisible();
   await sourceWarehouseInput.fill(sourceWarehouseName);
 
   const warehouseOption = this.page.locator('div[role="option"]:visible').filter({ hasText: sourceWarehouseName });
   await warehouseOption.click();
 }
-
-async selectTargetWarehouse(targetWarehouseName: string) {
+  
+  /*async selectTargetWarehouse(targetWarehouseName: string) {
   const targetWarehouseCell = this.stockEntryRow.locator('div.grid-static-col[data-fieldname="t_warehouse"]');
   const targetWarehouseInput = this.stockEntryRow.locator('input[data-fieldname="t_warehouse"]');
 
   await targetWarehouseCell.click();
+  await targetWarehouseInput.fill(targetWarehouseName);
+
+  const warehouseOption = this.page.locator('div[role="option"]:visible').filter({ hasText: targetWarehouseName });
+  await warehouseOption.click();
+  }*/
+
+
+  async selectTargetWarehouse(targetWarehouseName: string) {
+  const targetWarehouseField = this.stockEntryContainer.locator('.grid-row-open [data-fieldname="t_warehouse"]');
+  const targetWarehouseInput = targetWarehouseField.locator('input:visible');
+
+  await expect(targetWarehouseInput).toBeVisible();
   await targetWarehouseInput.fill(targetWarehouseName);
 
   const warehouseOption = this.page.locator('div[role="option"]:visible').filter({ hasText: targetWarehouseName });

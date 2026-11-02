@@ -2,20 +2,19 @@
 import { Page, Locator } from '@playwright/test';
 
 export class Login {
-  // Page
   page: Page;
 
-  // Login locators
+  // Login fields
   emailField: Locator;
   passwordField: Locator;
   submitButton: Locator;
   invalidLoginMessage: Locator;
 
-  // Validation locators
+  // Validation
   inputGroup: Locator;
   validationMessage: Locator;
 
-  // Logout locators
+  // Logout
   loginContainer: Locator;
   profileMenu: Locator;
   profileMenuItems: Locator;
@@ -36,7 +35,7 @@ export class Login {
     this.validationMessage = page.locator('.field-error');
 
     // Logout
-    this.loginContainer=page.locator('#page-desktop');
+    this.loginContainer = page.locator('#page-desktop');
     this.profileMenu = this.loginContainer.locator('.desktop-avatar .avatar.avatar-medium');
     this.profileMenuItems = page.locator('.dropdown-menu-item');
     this.logoutOption = page.getByText('Logout');
@@ -50,20 +49,19 @@ export class Login {
   }
 
   emailErrorMessage() {
-    const emailFieldError = this.inputGroup.filter({has: this.emailField, });
+    const emailFieldError = this.inputGroup.filter({ has: this.emailField });
     return emailFieldError.locator(this.validationMessage);
   }
 
   passwordErrorMessage() {
-    const passwordFieldError = this.inputGroup.filter({has: this.passwordField,});
+    const passwordFieldError = this.inputGroup.filter({ has: this.passwordField });
     return passwordFieldError.locator(this.validationMessage);
   }
 
   async logout() {
     await this.profileMenu.click();
-    const logoutMenuItem = this.profileMenuItems.filter({has: this.logoutOption});
+    const logoutMenuItem = this.profileMenuItems.filter({ has: this.logoutOption });
     await logoutMenuItem.click();
     await this.confirmLogoutButton.click();
   }
 }
-

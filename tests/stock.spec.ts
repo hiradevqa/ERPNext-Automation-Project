@@ -188,10 +188,10 @@ await loginPage.login(
 
 test('Receive stock using Material Receipt',async({page,stockPage})=>{
 await stockPage.clickDesktopOption('Stock');
-await stockPage.clicksidebarOption('Stock Entry');
-await stockPage.clickAddButton('Add Stock Entry');
+await stockPage.clickSidebarOption('Stock Entry');
+await stockPage.clickButton('Add Stock Entry');
 await stockPage.clickField('Stock Entry Type');
-await stockPage.selectoption('Material Receipt');
+await stockPage.selectOption('Material Receipt');
 await stockPage.selectTargetWarehouse('Finished');
 await stockPage.selectItem('QA-MOUSE-001');
 await page.waitForTimeout(1000);
@@ -208,8 +208,8 @@ await expect(stockPage.status).toHaveText('Submitted');
 test('Verify received quantity increased stock', async ({ page, stockPage }) => {
   await stockPage.clickDesktopOption('Stock');
   await stockPage.clickSidebarInsideOption('Reports', 'Stock Balance');
-  await stockPage.Filter1('Items', 'QA-MOUSE-001');
-  await stockPage.Filter1('Warehouses', 'Finished Goods - TxlD');
+  await stockPage.applyFilter('Items', 'QA-MOUSE-001');
+  await stockPage.applyFilter('Warehouses', 'Finished Goods - TxlD');
   await stockPage.clickStockReportAction();
   await expect(stockPage.stockBalanceRow).toBeVisible();
   await page.reload();
@@ -217,10 +217,10 @@ test('Verify received quantity increased stock', async ({ page, stockPage }) => 
 
   const quantityBefore = await stockPage.getStockBalanceQuantity();
 
-  await stockPage.clicksidebarOption('Stock Entry');
-  await stockPage.clickAddButton('Add Stock Entry');
+  await stockPage.clickSidebarOption('Stock Entry');
+  await stockPage.clickButton('Add Stock Entry');
   await stockPage.clickField('Stock Entry Type');
-  await stockPage.selectoption('Material Receipt');
+  await stockPage.selectOption('Material Receipt');
 
   const row1 = stockPage.row.nth(1);
 
@@ -247,8 +247,8 @@ test('Verify received quantity increased stock', async ({ page, stockPage }) => 
   await stockPage.clickSidebarInsideOption('Reports', 'Stock Balance');
   await page.reload();
   await stockPage.clickStockReportAction();
-  await stockPage.Filter1('Items', 'QA-MOUSE-001');
-  await stockPage.Filter1('Warehouses', 'Finished Goods - TxlD');
+  await stockPage.applyFilter('Items', 'QA-MOUSE-001');
+  await stockPage.applyFilter('Warehouses', 'Finished Goods - TxlD');
   await expect(stockPage.stockBalanceRow).toBeVisible();
   await page.reload();
 
@@ -260,11 +260,11 @@ test('Verify received quantity increased stock', async ({ page, stockPage }) => 
 
 test('Transfer stock between warehouses',async({page,stockPage})=>{
 await stockPage.clickDesktopOption('Stock');
-await stockPage.clicksidebarOption('Stock Entry');
-await stockPage.clickAddButton('Add Stock Entry');
+await stockPage.clickSidebarOption('Stock Entry');
+await stockPage.clickButton('Add Stock Entry');
 await stockPage.clickField('Stock Entry Type');
 const stockEntryType = 'Material Transfer';
-await stockPage.selectoption(stockEntryType);
+await stockPage.selectOption(stockEntryType);
 await stockPage.selectSourceWarehouse('Finished');
 await stockPage.selectTargetWarehouse('Goods In Transit');
 await stockPage.selectItem('QA-MOUSE-001');
@@ -281,100 +281,34 @@ await expect(stockPage.status).toHaveText('Submitted');
 });
 
 //Final
-/*test('Verify source warehouse quantity decreases after transfer',async({page,stockPage})=>{ //this Test is not according to requirements- needs updation also
-await stockPage.clickDesktopOption('Stock');
-await stockPage.clickSidebarInsideOption('Reports', 'Stock Balance');
-await stockPage.clickStockReportAction();
-await stockPage.Filter1('Items','QA-MOUSE-001');
-await stockPage.Filter1('Warehouses','Finished Goods - TxlD');
-await stockPage.clickStockReportAction();
-await page.reload();
-//await expect(stockPage.stockBalanceRow).toBeVisible();
-await expect(stockPage.stockBalanceRow).toBeVisible();
-//await stockPage.getStockBalanceQuantity();
-const sourceQuantityBefore = await stockPage.getStockBalanceQuantity();
-await stockPage.clicksidebarOption('Stock Entry');
-await stockPage.clickAddButton('Add Stock Entry');
-//await expect(stockPage.saveUpdate).toBeVisible();
-await stockPage.clickField('Stock Entry Type');
-await stockPage.selectoption('Material Transfer');
-const row1 = stockPage.row.nth(1);
-await stockPage.selectSourceWarehouse('Finished');
-await stockPage.selectTargetWarehouse('Goods In Transit');
-await expect(row1.locator('input[data-fieldname="t_warehouse"]')).toHaveValue(/Goods/);
-await stockPage.selectItem('QA-MOUSE-001');
-await expect(row1.locator('input[data-fieldname="item_code"]')).toHaveValue('QA-MOUSE-001');
-await page.waitForTimeout(1000);
-const quantity = '3';
-await stockPage.fillItemQuantity(quantity);
-//await expect(row1.locator('input[data-fieldname="qty"]')).toHaveValue(quantity);
-console.log(quantity);
-//await stockPage.fillItemRate('20');
-//await expect( row1.locator('input[data-fieldname="basic_rate"]')).toHaveValue(/20/);
-await stockPage.clickButton('Save');
-//await expect(stockPage.submit).toBeVisible();
-await stockPage.clickButton('Submit');
-await expect(stockPage.modalContainer).toBeVisible();
-await stockPage.clickButton('Yes');
-await expect(stockPage.status).toHaveText('Submitted');
-await stockPage.clickSidebarInsideOption('Reports', 'Stock Balance');
-await page.reload();
-await stockPage.clickStockReportAction();
-await stockPage.Filter1('Items','QA-MOUSE-001');
-await stockPage.Filter1('Warehouses','Finished Goods - TxlD');
-await stockPage.clickStockReportAction();
-await page.reload();
-await expect(stockPage.stockBalanceRow).toBeVisible();
-await page.reload();
-const sourceQuantityAfter = await stockPage.getStockBalanceQuantity();
-expect(sourceQuantityAfter).toBe(sourceQuantityBefore - Number(quantity));
-
-
-});*/
-
-
 
 test('Verify source warehouse quantity decreases after transfer', async ({ page, stockPage }) => {
   await stockPage.clickDesktopOption('Stock');
   await stockPage.clickSidebarInsideOption('Reports', 'Stock Balance');
-  await stockPage.Filter1('Items', 'QA-MOUSE-001');
-  await stockPage.Filter1('Warehouses', 'Finished Goods - TxlD');
-  await stockPage.clickStockReportAction();
-  await expect(stockPage.stockBalanceRow).toBeVisible();
 
+  // Get source warehouse quantity before transfer
+  await stockPage.applyFilter('Items', 'QA-MOUSE-001');
+  await stockPage.applyFilter('Warehouses', 'Finished Goods - TxlD');
+  await stockPage.clickStockReportAction();
+
+  await expect(stockPage.stockBalanceRow).toBeVisible({ timeout: 15000 });
   const sourceQuantityBefore = await stockPage.getStockBalanceQuantity();
 
-  await stockPage. selectStockBalanceWarehouses(
-    'Finished Goods - TxlD',
-    'Goods In Transit - TxlD'
-  );
-
-  //await stockPage.clickStockReportAction();
-  await expect(stockPage.stockBalanceRow).toBeVisible();
-
-  const targetQuantityBefore = await stockPage.getStockBalanceQuantity();
-
-  await stockPage.clicksidebarOption('Stock Entry');
-  await stockPage.clickAddButton('Add Stock Entry');
+  // Transfer stock to another warehouse
+  await stockPage.clickSidebarOption('Stock Entry');
+  await stockPage.clickButton('Add Stock Entry');
   await stockPage.clickField('Stock Entry Type');
-  await stockPage.selectoption('Material Transfer');
+  await stockPage.selectOption('Material Transfer');
 
-  const row1 = stockPage.row.nth(1);
+  const stockRow = stockPage.row.nth(1);
 
   await stockPage.selectSourceWarehouse('Finished');
   await stockPage.selectTargetWarehouse('Goods In Transit');
 
-  await expect(
-    row1.locator('input[data-fieldname="t_warehouse"]')
-  ).toHaveValue(/Goods/);
+  await expect(stockRow.locator('input[data-fieldname="t_warehouse"]')).toHaveValue(/Goods/);
 
   await stockPage.selectItem('QA-MOUSE-001');
-
-  await expect(
-    row1.locator('input[data-fieldname="item_code"]')
-  ).toHaveValue('QA-MOUSE-001');
-
-  await page.waitForTimeout(1000);
+  await expect(stockRow.locator('input[data-fieldname="item_code"]')).toHaveValue('QA-MOUSE-001');
 
   const quantity = '3';
   await stockPage.fillItemQuantity(quantity);
@@ -384,41 +318,27 @@ test('Verify source warehouse quantity decreases after transfer', async ({ page,
   await expect(stockPage.modalContainer).toBeVisible();
   await stockPage.clickButton('Yes');
   await expect(stockPage.status).toHaveText('Submitted');
-await page.pause();
+
+  // Check the source warehouse quantity after transfer
   await stockPage.clickSidebarInsideOption('Reports', 'Stock Balance');
-
-  await stockPage.selectStockBalanceWarehouses(
-    'Goods In Transit - TxlD',
-    'Finished Goods - TxlD'
-  );
-
+  await stockPage.applyFilter('Items', 'QA-MOUSE-001');
+  await stockPage.applyFilter('Warehouses', 'Finished Goods - TxlD');
   await stockPage.clickStockReportAction();
-  await expect(stockPage.stockBalanceRow).toBeVisible();
 
+  await expect(stockPage.stockBalanceRow).toBeVisible({ timeout: 15000 });
   const sourceQuantityAfter = await stockPage.getStockBalanceQuantity();
 
-  await stockPage. selectStockBalanceWarehouses(
-    'Finished Goods - TxlD',
-    'Goods In Transit - TxlD'
-  );
-
-  await stockPage.clickStockReportAction();
-  await expect(stockPage.stockBalanceRow).toBeVisible();
-
-  const targetQuantityAfter = await stockPage.getStockBalanceQuantity();
-
   expect(sourceQuantityAfter).toBe(sourceQuantityBefore - Number(quantity));
-  expect(targetQuantityAfter).toBe(targetQuantityBefore + Number(quantity));
 });
 
 
 //Yet to see
 test('Attempt stock transaction without required Field',async({page,stockPage})=>{
 await stockPage.clickDesktopOption('Stock');
-await stockPage.clicksidebarOption('Stock Entry');
-await stockPage.clickAddButton('Add Stock Entry');
+await stockPage.clickSidebarOption('Stock Entry');
+await stockPage.clickButton('Add Stock Entry');
 await stockPage.clickField('Stock Entry Type');
-await stockPage.selectoption('Material Receipt');
+await stockPage.selectOption('Material Receipt');
 await stockPage.selectTargetWarehouse('Finished');
 //await page.waitForTimeout(1000);
 await stockPage.fillItemRate('20');

@@ -1,3 +1,4 @@
+
 import { test, expect } from '../fixtures/fixtures';
 import { user } from '../data/users';
 
@@ -42,6 +43,8 @@ test('Verify authenticated session survives refresh', async ({ page, loginPage }
   await loginPage.login(user.validUser.email, user.validUser.password);
 
   await page.waitForURL('/desk');
+
+  // Check that refreshing doesn't log the user out
   await page.reload();
   await expect(page).toHaveURL('/desk');
 });
@@ -74,6 +77,7 @@ test('protected-page access after logout', async ({ page, loginPage }) => {
   await loginPage.logout();
   await expect(page).toHaveURL('/login?redirect-to=%2Fdesk');
 
+  // A logged-out user should be redirected to login
   await page.goto('/desk');
   await expect(page).toHaveURL('/login?redirect-to=%2Fdesk');
 });

@@ -1,10 +1,10 @@
-import { BasePage } from './base';
+/*import { BasePage } from './base';
 import{Page,Locator,expect} from '@playwright/test';
 import { GridHelper } from './gridHelper';
 
 export class SalesInvoice  extends BasePage{
 grid: GridHelper;
-dropdownContainer:Locator;
+//RdropdownContainer:Locator;
 salesInvoicePageContainer:Locator;
 salesInvoiceTitle: Locator;
 amount:Locator;
@@ -15,34 +15,98 @@ itemRate:Locator;
 status:Locator;
 invoiceId:Locator;
 invoiceIdContainer:Locator;
+outstandingAmount:Locator;
+
 
 
 constructor(page:Page){
 super(page);
 this.grid = new GridHelper(page);
-this.dropdownContainer=page.locator('.dropdown-menu.show');
 this.salesInvoicePageContainer = page.locator('#page-Sales\\ Invoice');
-this.salesInvoiceTitle = this.grid.getTitle(this.salesInvoicePageContainer);
+this.salesInvoiceTitle = this.getTitle(this.salesInvoicePageContainer);
 this.itemCode=this.grid.getItemCode(this.salesInvoicePageContainer);
 this.itemQty=this.grid.getItemQty(this.salesInvoicePageContainer);
 this.itemRate=this.grid.getItemRate(this.salesInvoicePageContainer);
-this.customerField=this.grid.getCustomer(this.salesInvoicePageContainer);
+this.customerField=this.getCustomer(this.salesInvoicePageContainer);
 this.amount=this.grid.getAmount(this.salesInvoicePageContainer);
-//used in stocks also
 this.status=this.salesInvoicePageContainer.locator('.indicator-pill.no-indicator-dot.whitespace-nowrap');
-//used in sales also
 this.invoiceIdContainer=this.salesInvoicePageContainer.locator('.form-name-container.mt-1.flex.justify-between.form-name-copy');
 this.invoiceId= this.invoiceIdContainer.locator('span.ellipsis.mr-3');
+this.outstandingAmount = this.salesInvoicePageContainer.locator('[data-fieldname="outstanding_amount"] .control-value'
+);
 }
 
-//repeated in deliveryNote & Payment & sales Invoice
-async clickDropdownOption(name:string){
-    const dropdownOption = this.dropdownContainer.filter({has:this.page.getByText(name, { exact: true })});
-    await dropdownOption.getByText(name, { exact: true }).click();
-}
-//used in payemt
+
 async getSalesInvoiceId(): Promise<string> {
   await expect(this.invoiceId).toHaveText(/^ACC-SINV-\d{4}-\d+$/);
   return await this.invoiceId.innerText();
 }
+
+async getOutstandingAmount(): Promise<number> {
+  const amount = await this.outstandingAmount.innerText();
+  const numericAmount = amount.replace('Rs', '').replace('₨', '').replaceAll(',', '').trim();
+
+  return Number(numericAmount);
+}
+}*/
+
+
+import { Page, Locator, expect } from '@playwright/test';
+import { BasePage } from './base';
+import { GridHelper } from './gridHelper';
+
+export class SalesInvoice extends BasePage {
+  grid: GridHelper;
+
+  // Sales Invoice page
+  salesInvoicePageContainer: Locator;
+  salesInvoiceTitle: Locator;
+
+  // Invoice fields
+  amount: Locator;
+  customerField: Locator;
+  itemCode: Locator;
+  itemQty: Locator;
+  itemRate: Locator;
+  status: Locator;
+
+  // Invoice details
+  invoiceId: Locator;
+  invoiceIdContainer: Locator;
+  outstandingAmount: Locator;
+
+  constructor(page: Page) {
+    super(page);
+    this.grid = new GridHelper(page);
+
+    this.salesInvoicePageContainer = page.locator('#page-Sales\\ Invoice');
+    this.salesInvoiceTitle = this.getTitle(this.salesInvoicePageContainer);
+
+    this.itemCode = this.grid.getItemCode(this.salesInvoicePageContainer);
+    this.itemQty = this.grid.getItemQty(this.salesInvoicePageContainer);
+    this.itemRate = this.grid.getItemRate(this.salesInvoicePageContainer);
+    this.customerField = this.getCustomer(this.salesInvoicePageContainer);
+    this.amount = this.grid.getAmount(this.salesInvoicePageContainer);
+
+    this.status = this.salesInvoicePageContainer.locator('.indicator-pill.no-indicator-dot.whitespace-nowrap');
+
+    this.invoiceIdContainer = this.salesInvoicePageContainer.locator('.form-name-container.mt-1.flex.justify-between.form-name-copy');
+    this.invoiceId = this.invoiceIdContainer.locator('span.ellipsis.mr-3');
+
+    this.outstandingAmount = this.salesInvoicePageContainer.locator('[data-fieldname="outstanding_amount"] .control-value');
+  }
+
+  async getSalesInvoiceId(): Promise<string> {
+    await expect(this.invoiceId).toHaveText(/^ACC-SINV-\d{4}-\d+$/);
+    return await this.invoiceId.innerText();
+  }
+
+  async getOutstandingAmount(): Promise<number> {
+    const amount = await this.outstandingAmount.innerText();
+
+    // Remove currency symbols before converting to a number
+    const numericAmount = amount.replace('Rs', '').replace('₨', '').replaceAll(',', '').trim();
+
+    return Number(numericAmount);
+  }
 }

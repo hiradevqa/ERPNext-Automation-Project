@@ -222,3 +222,4 @@ export class Customer extends BasePage {
     return this.customerNameField;
   }
 }
+
