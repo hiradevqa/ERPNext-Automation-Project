@@ -70,7 +70,7 @@ test('Login again after logout', async ({ page, loginPage }) => {
   await expect(page).toHaveURL('/desk');
 });
 
-test('protected-page access after logout', async ({ page, loginPage }) => {
+test('Verify protected page access is blocked after logout', async ({ page, loginPage }) => {
   await loginPage.login(user.validUser.email, user.validUser.password);
 
   await page.waitForURL('/desk');
